@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Лад — HR-система для вашої команди</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1630; --text:#f3f7ff; --muted:rgba(232,240,255,.72);
+  --g1:rgba(255,255,255,.17); --g2:rgba(255,255,255,.05); --gb:rgba(255,255,255,.24); --hl:rgba(255,255,255,.55);
+  --b1:#2dd4bf; --b2:#6aa8ff; --b3:#a78bfa; --b4:#ffb08a; --btn-t:#0b1630;
+  --head:'Unbounded','Onest',system-ui,sans-serif; --body:'Onest',system-ui,-apple-system,'Segoe UI',sans-serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#e8f0ff; --text:#10203d; --muted:rgba(16,32,61,.72);
+  --g1:rgba(255,255,255,.7); --g2:rgba(255,255,255,.3); --gb:rgba(255,255,255,.9); --hl:#fff; --btn-t:#fff; color-scheme:light;}}
+:root[data-theme="light"]{--bg:#e8f0ff;--text:#10203d;--muted:rgba(16,32,61,.72);--g1:rgba(255,255,255,.7);--g2:rgba(255,255,255,.3);--gb:rgba(255,255,255,.9);--hl:#fff;--btn-t:#fff;color-scheme:light}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{background:var(--bg);color:var(--text);font:400 17px/1.6 var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.scene{position:fixed;inset:0;z-index:-1;overflow:hidden;background:var(--bg)}
+.blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.75;animation:drift 22s ease-in-out infinite alternate}
+.b1{width:46vw;height:46vw;left:-10vw;top:-8vw;background:var(--b1)}
+.b2{width:42vw;height:42vw;right:-8vw;top:18vh;background:var(--b3);animation-delay:-7s}
+.b3{width:38vw;height:38vw;left:25vw;bottom:-14vw;background:var(--b2);animation-delay:-12s}
+.b4{width:26vw;height:26vw;right:12vw;bottom:6vh;background:var(--b4);opacity:.55;animation-delay:-4s}
+@keyframes drift{to{transform:translate(6vw,5vh) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.blob{animation:none}html{scroll-behavior:auto}}
+
+.glass{position:relative;background:linear-gradient(135deg,var(--g1),var(--g2));backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid var(--gb);border-radius:28px;
+  box-shadow:inset 0 1px 0 var(--hl),inset 0 -1px 0 rgba(255,255,255,.1),inset 0 0 24px rgba(255,255,255,.06),0 24px 60px rgba(5,10,40,.28)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:radial-gradient(120% 60% at 15% 0%,rgba(255,255,255,.28),transparent 55%)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--head);font-weight:600;line-height:1.15;letter-spacing:-.02em}
+h1{font-size:clamp(34px,5.6vw,64px)}
+h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:14px}
+h3{font-size:18px;margin-bottom:8px;letter-spacing:-.01em}
+p.lead{color:var(--muted);font-size:clamp(17px,1.6vw,20px);max-width:56ch}
+section{padding:84px 0}
+.sec-head{margin-bottom:40px;max-width:640px}
+.sec-head p{color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 28px;border-radius:999px;font:600 16px var(--body);text-decoration:none;cursor:pointer;border:0;transition:transform .2s,box-shadow .2s}
+.btn.main{background:linear-gradient(180deg,#fff,#cfe3ff);color:#0b1630;box-shadow:inset 0 -2px 6px rgba(80,120,200,.3),0 10px 30px rgba(110,170,255,.45)}
+.btn.main:hover{transform:translateY(-2px)}
+.btn:focus-visible,a:focus-visible,summary:focus-visible,input:focus-visible{outline:3px solid var(--b1);outline-offset:3px}
+.link{color:var(--text);font-weight:500;text-decoration:underline;text-underline-offset:5px}
+
+/* nav */
+header{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:20;padding:0 14px;margin-top:12px}
+nav.glass{max-width:1160px;margin:0 auto;display:flex;align-items:center;gap:26px;padding:10px 12px 10px 24px;border-radius:999px}
+.logo{font:600 20px var(--head);text-decoration:none;color:var(--text);margin-right:auto}
+nav a.nl{color:var(--muted);text-decoration:none;font-weight:500;font-size:15px}
+nav a.nl:hover{color:var(--text)}
+nav .btn{padding:10px 20px;font-size:15px}
+
+/* hero */
+.hero{padding:70px 0 40px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{margin-bottom:22px}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:32px}
+.proof{margin-top:34px;color:var(--muted);font-size:15px}
+.logos{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:10px;font:600 16px var(--head);opacity:.8}
+.mock{padding:22px;border-radius:32px}
+.mock-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-weight:600}
+.mock-h small{color:var(--muted);font-weight:400}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.tile{padding:14px;border-radius:20px;text-align:left}
+.tile b{display:block;font:600 26px var(--head)}
+.tile span{font-size:13px;color:var(--muted)}
+.row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:18px;background:rgba(255,255,255,.08);margin-top:8px;font-size:15px}
+.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:600 13px var(--head);color:#0b1630;flex:none}
+.row em{font-style:normal;color:var(--muted);font-size:13px;display:block;line-height:1.3}
+.ok{margin-left:auto;padding:6px 14px;border-radius:999px;background:rgba(45,212,191,.28);border:1px solid rgba(45,212,191,.6);font-size:13px;font-weight:600}
+.float{position:absolute;left:-34px;bottom:-30px;padding:14px 18px;border-radius:22px;width:230px;font-size:14px}
+.bar{height:8px;border-radius:9px;background:rgba(255,255,255,.2);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;width:66%;border-radius:9px;background:linear-gradient(90deg,var(--b1),var(--b2))}
+
+/* modules */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{padding:28px}
+.card p{color:var(--muted);font-size:16px}
+.ic{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;font-size:24px;margin-bottom:18px;background:rgba(255,255,255,.16);border:1px solid var(--gb);box-shadow:inset 0 1px 0 var(--hl)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
+.step{padding:28px;counter-increment:s}
+.step::after{content:counter(s);position:absolute;right:22px;top:14px;font:600 54px var(--head);opacity:.16}
+.step p{color:var(--muted);font-size:16px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:24px}
+.stat{padding:26px 22px}
+.stat b{display:block;font:600 clamp(30px,3.4vw,44px) var(--head);margin-bottom:4px}
+.stat span{color:var(--muted);font-size:15px;line-height:1.4;display:block}
+.quote{padding:36px;display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center}
+.quote .av{width:64px;height:64px;font-size:20px;background:linear-gradient(135deg,var(--b4),var(--b3))}
+.quote p{font-size:clamp(18px,2vw,22px);line-height:1.5;margin-bottom:10px}
+.quote small{color:var(--muted)}
+
+/* pricing */
+.price{padding:32px;display:flex;flex-direction:column}
+.price.rec{background:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,255,255,.1));border-color:#fff}
+.tag{align-self:flex-start;padding:4px 14px;border-radius:999px;background:linear-gradient(180deg,#fff,#cfe3ff);color:#0b1630;font-size:13px;font-weight:600;margin-bottom:12px}
+.amt{font:600 38px var(--head);margin:10px 0 2px}
+.amt small{font:400 15px var(--body);color:var(--muted)}
+.price ul{list-style:none;padding:0;margin:20px 0 28px;color:var(--muted);font-size:16px;display:grid;gap:9px}
+.price li::before{content:"✓";color:var(--b1);font-weight:700;margin-right:10px}
+.price .btn{margin-top:auto}
+.btn.ghost{background:rgba(255,255,255,.14);border:1px solid var(--gb);color:var(--text);box-shadow:inset 0 1px 0 var(--hl)}
+
+/* faq */
+.faq{max-width:780px;display:grid;gap:12px}
+details{padding:0;border-radius:22px}
+summary{list-style:none;cursor:pointer;padding:20px 26px;font-weight:600;display:flex;justify-content:space-between;gap:16px;position:relative;z-index:1}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:24px;line-height:1;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 26px 22px;color:var(--muted);position:relative;z-index:1}
+
+/* final */
+.final{padding:56px 40px;text-align:center}
+.final h2{max-width:20ch;margin:0 auto 14px}
+.final p{color:var(--muted);margin-bottom:28px}
+.lead-form{display:flex;gap:10px;max-width:520px;margin:0 auto;padding:7px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid var(--gb);box-shadow:inset 0 1px 0 var(--hl)}
+.lead-form input{flex:1;min-width:0;background:transparent;border:0;color:var(--text);font:400 16px var(--body);padding:0 18px}
+.lead-form input::placeholder{color:var(--muted)}
+.note{font-size:14px;margin-top:16px;color:var(--muted)}
+#thanks{display:none;font-weight:600;font-size:18px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+@media (max-width:900px){
+  .hero .wrap{grid-template-columns:1fr}
+  .grid3,.steps{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  nav a.nl{display:none}
+  .float{left:12px;bottom:-26px}
+  .quote{grid-template-columns:1fr;padding:26px}
+  section{padding:60px 0}
+}
+@media (max-width:520px){.lead-form{flex-direction:column;border-radius:28px;padding:10px}.lead-form input{padding:12px 16px}.final{padding:40px 22px}}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i><i class="blob b4"></i></div>
+
+<header>
+  <nav class="glass" aria-label="Головне меню">
+    <a class="logo" href="#top">Лад</a>
+    <a class="nl" href="#modules">Можливості</a>
+    <a class="nl" href="#results">Результати</a>
+    <a class="nl" href="#pricing">Ціни</a>
+    <a class="nl" href="#faq">Питання</a>
+    <a class="btn main" href="#demo">Запросити демо</a>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Кадрова рутина — за хвилини, а не за дні</h1>
+      <p class="lead">Лад — HR-система для компаній від 10 до 1000 людей. Кадрові документи, відпустки, табель, онбординг і аналітика в одному вікні.</p>
+      <div class="cta-row">
+        <a class="btn main" href="#demo">Запросити демо</a>
+        <a class="link" href="#pricing">Дивитись ціни</a>
+      </div>
+      <div class="proof">Нам довіряють 300+ компаній
+        <div class="logos"><span>Nova</span><span>Orbita</span><span>Kvitka</span><span>Delta&nbsp;Pro</span><span>Rivne&nbsp;Tech</span></div>
+      </div>
+    </div>
+    <div style="position:relative">
+      <div class="glass mock">
+        <div class="mock-h"><span>Сьогодні в команді</span><small>вівторок, 28 жовтня</small></div>
+        <div class="tiles">
+          <div class="glass tile"><b>42</b><span>в офісі</span></div>
+          <div class="glass tile"><b>5</b><span>у відпустці</span></div>
+          <div class="glass tile"><b>3</b><span>заявки</span></div>
+        </div>
+        <div class="row"><div class="av" style="background:var(--b1)">ОК</div><div>Олена Коваль<em>Відпустка, 3–14 листопада</em></div><span class="ok">Схвалити</span></div>
+        <div class="row"><div class="av" style="background:var(--b4)">МП</div><div>Максим Павленко<em>Лікарняний, 2 дні</em></div><span class="ok">Схвалити</span></div>
+        <div class="row"><div class="av" style="background:var(--b2)">ІШ</div><div>Ірина Шевчук<em>Віддалена робота, п’ятниця</em></div><span class="ok">Схвалити</span></div>
+      </div>
+      <div class="glass float"><b>Онбординг: Андрій Мельник</b><div class="bar"><i></i></div><span style="color:var(--muted);font-size:13px">4 із 6 кроків виконано</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="modules">
+  <div class="wrap">
+    <div class="sec-head"><h2>Усе для HR в одній системі</h2><p>Замість таблиць у різних файлах — одне джерело правди для HR, керівників і співробітників.</p></div>
+    <div class="grid3">
+      <div class="glass card"><div class="ic">🗂</div><h3>Облік персоналу</h3><p>Картки співробітників і електронні кадрові документи. Наказ готовий за кілька кліків.</p></div>
+      <div class="glass card"><div class="ic">📅</div><h3>Відпустки та табель</h3><p>Заявки, погодження й баланс днів у одному місці. Табель формується автоматично.</p></div>
+      <div class="glass card"><div class="ic">🤝</div><h3>Рекрутинг і онбординг</h3><p>Воронка кандидатів і чек-лист першого тижня: новачок знає, що робити з першого дня.</p></div>
+      <div class="glass card"><div class="ic">🎯</div><h3>Цілі та оцінка</h3><p>Цілі команди, 360° відгуки й регулярні one-to-one без паперових форм.</p></div>
+      <div class="glass card"><div class="ic">📊</div><h3>Аналітика</h3><p>Плинність, вартість найму, завантаження відділів. Звіти оновлюються самі.</p></div>
+      <div class="glass card"><div class="ic">📱</div><h3>Кабінет співробітника</h3><p>Довідки, відпустки та документи доступні з телефону. HR менше відповідає на однакові питання.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head"><h2>Запуск за один день</h2><p>Без складного впровадження та окремого ІТ-проєкту.</p></div>
+    <div class="steps">
+      <div class="glass step"><h3>Підключіть</h3><p>Створіть акаунт і запросіть команду. Налаштування займає близько години.</p></div>
+      <div class="glass step"><h3>Імпортуйте дані</h3><p>Завантажте Excel-таблицю, ми безкоштовно допоможемо з міграцією з вашої поточної системи.</p></div>
+      <div class="glass step"><h3>Запустіть</h3><p>Співробітники отримують доступ, а перші заявки й документи вже йдуть через Лад.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="sec-head"><h2>Що змінюється після запуску</h2></div>
+    <div class="stats">
+      <div class="glass stat"><b>−60%</b><span>часу на кадрову рутину</span></div>
+      <div class="glass stat"><b>3×</b><span>швидший онбординг</span></div>
+      <div class="glass stat"><b>1 день</b><span>до першого запуску</span></div>
+      <div class="glass stat"><b>99,9%</b><span>доступність сервісу</span></div>
+    </div>
+    <div class="glass quote">
+      <div class="av">ТМ</div>
+      <div>
+        <p>Раніше відпустки й табель займали в мене два дні щомісяця. Тепер я відкриваю Лад, перевіряю й закриваю місяць за годину.</p>
+        <small>Тетяна Мороз, HR-директорка, «Orbita»</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head"><h2>Прозорі ціни</h2><p>Платите за кількість співробітників. Без прихованих платежів і прив’язки до річного договору.</p></div>
+    <div class="grid3">
+      <div class="glass price"><h3>Старт</h3><p style="color:var(--muted)">Для команд до 25 людей</p><div class="amt">60 ₴<small> / співробітник на міс.</small></div>
+        <ul><li>Облік персоналу</li><li>Відпустки та табель</li><li>Кабінет співробітника</li></ul><a class="btn ghost" href="#demo">Спробувати 14 днів</a></div>
+      <div class="glass price rec"><span class="tag">Найчастіше обирають</span><h3>Бізнес</h3><p style="color:var(--muted)">Для компаній від 25 до 300 людей</p><div class="amt">110 ₴<small> / співробітник на міс.</small></div>
+        <ul><li>Усе зі Старту</li><li>Рекрутинг і онбординг</li><li>Цілі та оцінка</li><li>Інтеграції з 1С та Slack</li></ul><a class="btn main" href="#demo">Спробувати 14 днів</a></div>
+      <div class="glass price"><h3>Корпоративний</h3><p style="color:var(--muted)">Від 300 людей</p><div class="amt">Індивідуально</div>
+        <ul><li>Усе з Бізнесу</li><li>SSO та розширені ролі</li><li>SLA та виділений менеджер</li></ul><a class="btn ghost" href="#demo">Обговорити умови</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head"><h2>Часті питання</h2></div>
+    <div class="faq">
+      <details class="glass"><summary>Скільки триває впровадження?</summary><p>Більшість команд запускаються за один робочий день. Для великих компаній із міграцією даних потрібно до двох тижнів.</p></details>
+      <details class="glass"><summary>Чи можна перенести дані з Excel або іншої системи?</summary><p>Так. Імпортуємо таблиці й допомагаємо з міграцією безкоштовно.</p></details>
+      <details class="glass"><summary>Як захищені дані співробітників?</summary><p>Дані шифруються, є резервні копії та гнучкі ролі доступу. Ми дотримуємося вимог GDPR і законодавства про захист персональних даних.</p></details>
+      <details class="glass"><summary>Що з даними, якщо я припиню користуватися?</summary><p>Ви можете в будь-який момент вивантажити всі дані у форматі Excel. Договір не прив’язує вас на рік.</p></details>
+    </div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="glass final">
+      <h2>Покажемо Лад на ваших даних</h2>
+      <p>Демо триває 20 хвилин. Без кредитної картки.</p>
+      <div class="lead-form" id="f">
+        <input id="em" type="email" placeholder="Робочий email" aria-label="Робочий email" autocomplete="email">
+        <button class="btn main" id="go" type="button">Запросити демо</button>
+      </div>
+      <div id="thanks">Дякуємо! Ми напишемо вам протягом робочого дня.</div>
+      <div class="note">Відповімо протягом одного робочого дня</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 Лад</span><span>hello@lad-hr.example</span></div></footer>
+
+<script>
+document.getElementById('go').addEventListener('click',function(){
+  var i=document.getElementById('em');
+  if(!i.checkValidity()||!i.value){i.focus();return}
+  document.getElementById('f').style.display='none';
+  document.querySelector('.note').style.display='none';
+  document.getElementById('thanks').style.display='block';
+});
+</script>
+</body>
+</html>
